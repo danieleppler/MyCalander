@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/calenderFragment">
+    <fragment
+        android:id="@+id/addCalenderItemFragment"
+        android:name="com.example.mycalender.AddNewCalenderItemFragment"
+        android:label="AddCalenderItemFragment" />
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.example.mycalender.CalenderFragment"
+        android:label="CalenderFragment" >
+        <action
+            android:id="@+id/add_calender_item"
+            app:destination="@id/addCalenderItemFragment" />
+    </fragment>
+</navigation>
