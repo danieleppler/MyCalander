@@ -1,8 +1,17 @@
 package com.example.mycalender
 
+import android.graphics.Color
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.Date
+import java.util.UUID
 
-class Event(val eventName: String,
-                 val eventLocation:String,
-                 val eventDate : Date,
-                 val isEventPublic : Boolean) : CalenderItem(itemName = eventName, itemDate = eventDate)
+@Entity
+data class Event(
+    @PrimaryKey var id: String = UUID.randomUUID().toString(),
+    var eventName: String = "Daily",
+    var eventLocation: String = "Teams",
+    var eventDateFrom: Date = Date(),
+    var eventDateTo: Date = Date(),
+    var eventColor: Int = Color.BLUE
+)

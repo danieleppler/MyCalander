@@ -7,7 +7,7 @@ import com.example.mycalender.CalendarDay
 import com.example.mycalender.R
 
 
-class CalendarAdapter(private val calendarDays: List<CalendarDay>) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(private val calendarDays: List<CalendarDay>,private val onDayClicked: (CalendarDay) -> Unit) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -17,33 +17,27 @@ class CalendarAdapter(private val calendarDays: List<CalendarDay>) : RecyclerVie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val day = calendarDays[position]
-        holder.bind(day)
+        holder.bind(day, onDayClicked = onDayClicked)
     }
 
     override fun getItemCount(): Int = calendarDays.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textDay: TextView = itemView.findViewById(R.id.text_day)
+        private val eventsContainer: ViewGroup = itemView.findViewById(R.id.eventsContainer)
 
-        fun bind(day: CalendarDay) {
+        fun bind(day: CalendarDay , onDayClicked: (CalendarDay) -> Unit) {
             textDay.text = day.dayText
-
-            // Style headers differently
-            when {
-                day.isValidDay -> {
-                    textDay.setBackgroundColor(itemView.context.getColor(R.color.day_bg_color))
-                    textDay.textSize = 16f
-
-                    // Add click listener for valid days
-                    itemView.setOnClickListener {
-                        if (day.dayText.isNotEmpty()) {
-                            // Handle day selection
-                            // Add your day selection logic here
-                        }
-                    }
-                }
-                else -> {
-                    textDay.setBackgroundColor(itemView.context.getColor(R.color.day_bg_color))
+            day.events.forEach { event ->
+                val eventView = LayoutInflater.from(itemView.context)
+                    .inflate(R.layout.event_box, eventsContainer, false) as TextView
+                eventView.text = event?.eventName
+                eventsContainer.addView(eventView)
+            }
+            textDay.setBackgroundColor(itemView.context.getColor(R.color.day_bg_color))
+            itemView.setOnClickListener {
+                if (day.isValidDay) { // Only clickable if it's an actual day
+                    onDayClicked(day)
                 }
             }
         }

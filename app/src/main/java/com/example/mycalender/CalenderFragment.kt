@@ -8,22 +8,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import java.util.ArrayList
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
+import java.util.Date
 
 
 private const val TAG ="CALENDER_FRAGMENT"
 
 class CalenderFragment : Fragment() {
 
-    lateinit var addItemBtn: FloatingActionButton
-    private var recyclerView: RecyclerView? = null
 
-    private var calendarDays: List<CalendarDay> = mutableListOf()
+    private var recyclerView: RecyclerView? = null
+    private lateinit var calendarAdapter: CalendarAdapter
+    private val calenderViewModel: CalenderViewModel by activityViewModels()
+    private var calendarDays: MutableList<CalendarDay> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,35 +40,50 @@ class CalenderFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_calender, container, false)
-
         recyclerView = view.findViewById(R.id.recycler_view_calendar)
-        generateCalendarData()
+        calendarDays = mutableListOf()
         setupRecyclerView()
+        generateCalendarData()
         return view
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addItemBtn = view.findViewById(R.id.fab)
-        // Set up button click with binding
-        addItemBtn.setOnClickListener {
-            try {
-                findNavController().navigate(R.id.add_calender_item)
-                Log.d("Navigation", "Navigation called successfully")
-            } catch (e: Exception) {
-                Log.e("Navigation", "Navigation failed: ${e.message}")
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                calenderViewModel.events.collect {
+                    generateCalendarData()
+                }
             }
         }
+
+
     }
+
     private fun setupRecyclerView() {
         // 7 columns for days of week
         recyclerView!!.layoutManager = GridLayoutManager(context, 7)
-        recyclerView!!.setAdapter(CalendarAdapter(calendarDays))
+        calendarAdapter = CalendarAdapter(calendarDays,{dayClicked ->
+            handleDayClicked(dayClicked)
+        })
+        recyclerView!!.adapter = calendarAdapter
+    }
+
+    private fun handleDayClicked(day : CalendarDay){
+        if (day.dayText.isNotEmpty()) {
+            val calendar = Calendar.getInstance()
+            val action = CalenderFragmentDirections.actionCalenderFragmentToDayViewFragment(
+                day.dayText,
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.YEAR)
+            )
+            findNavController().navigate(action)
+        }
     }
 
     private fun generateCalendarData() {
-
-
+        calendarDays.clear()
         // Get current month data
         val calendar = Calendar.getInstance();
 
@@ -75,7 +99,17 @@ class CalenderFragment : Fragment() {
         // Add days of current month
         val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (i in 1..daysInMonth) {
-            calendarDays += CalendarDay(i.toString(), false);
+            val relevantEvents = calenderViewModel.events.value.filter { event ->
+                val eventCalendar = Calendar.getInstance()
+                eventCalendar.time = event?.eventDateFrom!! // Assuming eventDateFrom is Long
+                eventCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                        eventCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
+                        eventCalendar.get(Calendar.DAY_OF_MONTH) == i
+            }
+            calendarDays += if(relevantEvents.isNotEmpty())
+                CalendarDay(i.toString(), true, events = relevantEvents);
+            else CalendarDay(i.toString(), true);
         }
+        calendarAdapter.notifyDataSetChanged()
     }
 }

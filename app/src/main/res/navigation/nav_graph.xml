@@ -1,18 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/calenderFragment">
     <fragment
-        android:id="@+id/addCalenderItemFragment"
-        android:name="com.example.mycalender.AddNewCalenderItemFragment"
-        android:label="AddCalenderItemFragment" />
+        android:id="@+id/fragment_event_details"
+        android:name="com.example.mycalender.EventDetailsFragment"
+        android:label="EventDetailsFragment" >
+        <action
+            android:id="@+id/go_back_to_day_view"
+            app:destination="@id/dayViewFragment" />
+        <action
+            android:id="@+id/go_back_to_calender"
+            app:destination="@id/calenderFragment" />
+        <action
+            android:id="@+id/go_to_task_details"
+            app:destination="@+id/fragment_task_details" />
+        <action
+            android:id="@+id/go_to_birthday_details"
+            app:destination="@+id/fragment_birthday_details" />
+        <argument
+            android:name="eventId"
+            app:argType="java.util.UUID"
+            app:nullable="true"
+            />
+        <argument
+            android:name="eventDate"
+            app:argType="java.util.Date"
+            app:nullable="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_task_details"
+        android:name="com.example.mycalender.TaskDetailsFragment"
+        android:label="TaskDetailsFragment" >
+        <action
+            android:id="@+id/go_back_to_calender"
+            app:destination="@id/calenderFragment" />
+        <action
+            android:id="@+id/go_to_event_details"
+            app:destination="@+id/fragment_event_details" />
+        <action
+            android:id="@+id/go_to_birthday_details"
+            app:destination="@+id/fragment_birthday_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_birthday_details"
+        android:name="com.example.mycalender.BirthDayDetailsFragment"
+        android:label="BirthDayDetailsFragment" >
+        <action
+            android:id="@+id/go_back_to_calender"
+            app:destination="@id/calenderFragment" />
+        <action
+            android:id="@+id/go_to_task_details"
+            app:destination="@+id/fragment_task_details" />
+        <action
+            android:id="@+id/go_to_event_details"
+            app:destination="@+id/fragment_event_details" />
+    </fragment>
     <fragment
         android:id="@+id/calenderFragment"
         android:name="com.example.mycalender.CalenderFragment"
         android:label="CalenderFragment" >
         <action
-            android:id="@+id/add_calender_item"
-            app:destination="@id/addCalenderItemFragment" />
+            android:id="@+id/action_calenderFragment_to_dayViewFragment"
+            app:destination="@id/dayViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/dayViewFragment"
+        android:name="com.example.mycalender.DayViewFragment"
+        tools:layout="@layout/fragment_day_view"
+        android:label="Day View">
+        <argument
+            android:name="dayNumber"
+            app:argType="string" />
+        <argument
+            android:name="month"
+            app:argType="integer"
+             />
+        <argument
+            android:name="year"
+            app:argType="integer"
+             />
+        <action
+            android:id="@+id/go_to_event_details"
+            app:destination="@+id/fragment_event_details" />
+        <action
+            android:id="@+id/action_dayViewFragment_to_eventDetailsFragment"
+            app:destination="@id/fragment_event_details" />
+    </fragment>
+
+
 </navigation>
