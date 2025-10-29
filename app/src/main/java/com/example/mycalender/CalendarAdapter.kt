@@ -3,11 +3,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mycalender.CalendarDay
+import com.example.mycalender.DateModels.CalendarDay
 import com.example.mycalender.R
 
 
-class CalendarAdapter(private val calendarDays: List<CalendarDay>,private val onDayClicked: (CalendarDay) -> Unit) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(private val calendarDays: List<CalendarDay>, private val onDayClicked: (CalendarDay) -> Unit) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -26,7 +26,7 @@ class CalendarAdapter(private val calendarDays: List<CalendarDay>,private val on
         private val textDay: TextView = itemView.findViewById(R.id.text_day)
         private val eventsContainer: ViewGroup = itemView.findViewById(R.id.eventsContainer)
 
-        fun bind(day: CalendarDay , onDayClicked: (CalendarDay) -> Unit) {
+        fun bind(day: CalendarDay, onDayClicked: (CalendarDay) -> Unit) {
             textDay.text = day.dayText
             day.events.forEach { event ->
                 val eventView = LayoutInflater.from(itemView.context)

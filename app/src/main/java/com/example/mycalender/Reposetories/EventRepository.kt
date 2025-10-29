@@ -2,7 +2,7 @@ package com.example.mycalender.Reposetories
 
 import android.content.Context
 import androidx.room.Room
-import com.example.mycalender.Event
+import com.example.mycalender.DateModels.Event
 import com.example.mycalender.database.EventDataBase
 
 import kotlinx.coroutines.CoroutineScope
@@ -20,13 +20,15 @@ class EventRepository private constructor(context: Context,
         .fallbackToDestructiveMigration()
         .build()
 
-    fun addEvent(event:Event){
+    fun addEvent(event: Event){
         database.EventDao().addEvent(event)
     }
 
     fun getEvents() : Flow<List<Event>> = database.EventDao().getEvents()
 
-    suspend fun getEventById(id:String) : Flow<Event> = database.EventDao().getEventById(id)
+    fun getEventById(id:String) : Flow<Event> = database.EventDao().getEventById(id)
+
+    fun deleteAllCurrentHolidays():Unit = database.EventDao().deleteAllHolidays()
 
     companion object{
         private var INSTANCE : EventRepository? = null

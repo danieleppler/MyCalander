@@ -2,6 +2,7 @@ package com.example.mycalender
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mycalender.DateModels.Event
 import com.example.mycalender.Reposetories.EventRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

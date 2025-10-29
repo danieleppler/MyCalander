@@ -3,7 +3,7 @@ package com.example.mycalender.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.mycalender.Event
+import com.example.mycalender.DateModels.Event
 
 
 @Database(entities = [Event::class], version = 2)

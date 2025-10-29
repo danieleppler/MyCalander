@@ -1,4 +1,7 @@
-package com.example.mycalender
+package com.example.mycalender.DateModels
+
+import com.example.mycalender.BirthDay
+import com.example.mycalender.Task
 
 data class CalendarDay(
     val dayText: String,

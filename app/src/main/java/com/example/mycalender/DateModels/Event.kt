@@ -1,4 +1,4 @@
-package com.example.mycalender
+package com.example.mycalender.DateModels
 
 import android.graphics.Color
 import androidx.room.Entity

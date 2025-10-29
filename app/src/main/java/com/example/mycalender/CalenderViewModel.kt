@@ -2,12 +2,12 @@ package com.example.mycalender
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mycalender.DateModels.Event
 import com.example.mycalender.Reposetories.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Thread.State
 
 class CalenderViewModel : ViewModel() {
     private var _events : MutableStateFlow<List<Event?>> = MutableStateFlow(emptyList())
