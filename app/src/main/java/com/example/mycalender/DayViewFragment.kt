@@ -1,5 +1,6 @@
 package com.example.mycalender
 
+import CalenderViewModel
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -95,6 +96,8 @@ class DayViewFragment : Fragment() {
     private fun setupDayTitle() {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_MONTH, args.dayNumber.toInt())
+        calendar.set(Calendar.MONTH, args.month)
+        calendar.set(Calendar.YEAR,args.year)
 
         val dateFormat = SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
         dayTitle.text = dateFormat.format(calendar.time)
@@ -115,12 +118,15 @@ class DayViewFragment : Fragment() {
             // Find events that fall in this hour
             val eventsInHour = events.filterNotNull().filter { event ->
                 val eventCalendar = Calendar.getInstance()
-                eventCalendar.time = event.eventDateFrom
+                eventCalendar.time = event.eventDateTo
 
                 val eventDay = eventCalendar.get(Calendar.DAY_OF_MONTH)
                 val eventHour = eventCalendar.get(Calendar.HOUR_OF_DAY)
+                val eventMonth = eventCalendar.get(Calendar.MONTH)
+                val eventYear = eventCalendar.get(Calendar.YEAR)
 
-                eventDay == args.dayNumber.toInt() && eventHour == hour
+                eventDay == args.dayNumber.toInt() && eventHour == hour && eventMonth == args.month
+                        && eventYear == args.year
             }
             hourSlots.add(HourSlot(hourText, hour, eventsInHour))
         }
@@ -168,6 +174,7 @@ class DayViewAdapter(
 
                 val eventTitle = eventView.findViewById<TextView>(R.id.event_title)
                 eventTitle?.text = event.eventName ?: "Untitled Event"
+                eventView.setBackgroundColor(event.eventColor)
                 eventView.setOnClickListener {
                     onEventClick(event)
                 }

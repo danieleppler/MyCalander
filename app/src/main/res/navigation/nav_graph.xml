@@ -14,12 +14,6 @@
         <action
             android:id="@+id/go_back_to_calender"
             app:destination="@id/calenderFragment" />
-        <action
-            android:id="@+id/go_to_task_details"
-            app:destination="@+id/fragment_task_details" />
-        <action
-            android:id="@+id/go_to_birthday_details"
-            app:destination="@+id/fragment_birthday_details" />
         <argument
             android:name="eventId"
             app:argType="java.util.UUID"
@@ -32,34 +26,6 @@
             />
     </fragment>
 
-    <fragment
-        android:id="@+id/fragment_task_details"
-        android:name="com.example.mycalender.TaskDetailsFragment"
-        android:label="TaskDetailsFragment" >
-        <action
-            android:id="@+id/go_back_to_calender"
-            app:destination="@id/calenderFragment" />
-        <action
-            android:id="@+id/go_to_event_details"
-            app:destination="@+id/fragment_event_details" />
-        <action
-            android:id="@+id/go_to_birthday_details"
-            app:destination="@+id/fragment_birthday_details" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_birthday_details"
-        android:name="com.example.mycalender.BirthDayDetailsFragment"
-        android:label="BirthDayDetailsFragment" >
-        <action
-            android:id="@+id/go_back_to_calender"
-            app:destination="@id/calenderFragment" />
-        <action
-            android:id="@+id/go_to_task_details"
-            app:destination="@+id/fragment_task_details" />
-        <action
-            android:id="@+id/go_to_event_details"
-            app:destination="@+id/fragment_event_details" />
-    </fragment>
     <fragment
         android:id="@+id/calenderFragment"
         android:name="com.example.mycalender.CalenderFragment"

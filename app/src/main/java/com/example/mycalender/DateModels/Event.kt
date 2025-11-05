@@ -13,5 +13,5 @@ data class Event(
     var eventLocation: String = "Teams",
     var eventDateFrom: Date = Date(),
     var eventDateTo: Date = Date(),
-    var eventColor: Int = Color.BLUE
+    var eventColor: Int = -14774017
 )

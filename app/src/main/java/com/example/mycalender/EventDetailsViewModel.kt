@@ -1,5 +1,6 @@
 package com.example.mycalender
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mycalender.DateModels.Event
@@ -12,8 +13,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+
+
 class EventDetailsViewModel() : ViewModel() {
 
+    val TAG = "EventDetailsViewModel"
     private var _event: MutableStateFlow<Event?> = MutableStateFlow(Event())
     val event: StateFlow<Event?> = _event.asStateFlow()
     val eventRepository = EventRepository.get()
@@ -22,6 +26,7 @@ class EventDetailsViewModel() : ViewModel() {
     fun loadEventById(eventId: UUID) {
         viewModelScope.launch {
             eventRepository.getEventById(eventId.toString()).collect { event ->
+                Log.i( "got event title ${event.eventName}",TAG)
                 _event.value = event
             }
         }

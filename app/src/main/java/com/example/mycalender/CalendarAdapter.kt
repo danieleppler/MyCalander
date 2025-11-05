@@ -32,6 +32,7 @@ class CalendarAdapter(private val calendarDays: List<CalendarDay>, private val o
                 val eventView = LayoutInflater.from(itemView.context)
                     .inflate(R.layout.event_box, eventsContainer, false) as TextView
                 eventView.text = event?.eventName
+                eventView.setBackgroundColor(event!!.eventColor)
                 eventsContainer.addView(eventView)
             }
             textDay.setBackgroundColor(itemView.context.getColor(R.color.day_bg_color))

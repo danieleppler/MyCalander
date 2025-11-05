@@ -12,8 +12,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         val currentFragment = supportFragmentManager.findFragmentById(R.id.calender_fragment_container)
         if(currentFragment == null){
             supportFragmentManager.beginTransaction().

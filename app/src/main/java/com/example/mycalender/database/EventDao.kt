@@ -18,8 +18,6 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addEvent(event: Event)
 
-    @Query("DELETE FROM event WHERE eventColor = -14575885")
+    @Query("DELETE FROM event WHERE eventColor = -7876885")
     fun deleteAllHolidays()
-
-
 }

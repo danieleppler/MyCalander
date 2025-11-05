@@ -41,12 +41,16 @@ class EventDetailsFragment : Fragment() {
         args.eventId?.let { eventId ->
             viewLifecycleOwner.lifecycleScope.launch {
                 eventDetailsViewModel.loadEventById(eventId)
+            }
 
-                eventDetailsViewModel.event.value?.let { event ->
-                    binding.itemTitle.setText(event.eventName)
-                    binding.eventLocation.setText(event.eventLocation)
-                    binding.eventColor.setText(event.eventColor.toString())
-                    updateDateTimeFields(event.eventDateFrom, event.eventDateTo)
+            // Collect in a separate launch
+            viewLifecycleOwner.lifecycleScope.launch {
+                eventDetailsViewModel.event.collect { event ->
+                    event?.let {
+                        binding.itemTitle.setText(it.eventName)
+                        binding.eventLocation.setText(it.eventLocation)
+                        updateDateTimeFields(it.eventDateFrom, it.eventDateTo)
+                    }
                 }
             }
         }
@@ -147,7 +151,6 @@ class EventDetailsFragment : Fragment() {
                     oldEvent.copy(eventName = text.toString())
                 }
             }
-
             eventLocation.doOnTextChanged { text, _, _, _ ->
                 eventDetailsViewModel.updateEvent { oldEvent ->
                     oldEvent.copy(eventLocation = text.toString())
@@ -158,13 +161,6 @@ class EventDetailsFragment : Fragment() {
 
     private fun setupButtons() {
         binding.apply {
-            tabTask.setOnClickListener {
-                findNavController().navigate(R.id.go_to_task_details)
-            }
-
-            tabBirthday.setOnClickListener {
-                findNavController().navigate(R.id.go_to_birthday_details)
-            }
 
             btnClose.setOnClickListener {
                 eventDetailsViewModel.event.value?.eventDateFrom?.let { date ->
@@ -178,7 +174,6 @@ class EventDetailsFragment : Fragment() {
                     findNavController().navigate(action)
                 }
             }
-
             btnSave.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
                     eventDetailsViewModel.saveEvent()
